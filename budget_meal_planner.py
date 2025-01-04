@@ -1,3 +1,4 @@
+# neecessry libraries
 import streamlit as st
 from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
@@ -17,10 +18,10 @@ llm = ChatGroq(model="Gemma2-9b-It", groq_api_key=groq_api_key)
 
 # Prompt template for meal planning
 meal_prompt_template = PromptTemplate(
-    input_variables=["preferences", "budget", "meals_per_week", "country", "city"],
+    input_variables=["preferences", "budget", "meals_per_week", "country", "state"],
     template="""
     You are an AI assistant specializing in meal planning. Based on the user's dietary preferences, weekly budget, 
-    number of meals needed, country, and city, create a budget-friendly weekly meal plan. Ensure the plan meets nutritional needs, 
+    number of meals needed, country, and state, create a budget-friendly weekly meal plan. Ensure the plan meets nutritional needs, 
     includes a grocery list, and provides tips for reducing food waste. Consider the specific region, cultural preferences, and food availability 
     in {country}, {state}. Avoid suggesting ingredients or dishes that are culturally inappropriate or unavailable in the specified region.
 
@@ -33,7 +34,7 @@ meal_prompt_template = PromptTemplate(
 
     Country: {country}
 
-    City: {state}
+    State: {state}
 
     Your Response:
     """
@@ -47,7 +48,7 @@ preferences = st.sidebar.text_area("Dietary Preferences", placeholder="e.g., veg
 budget = st.sidebar.number_input("Weekly Budget ($)", min_value=10, step=5)
 meals_per_week = st.sidebar.number_input("Meals Per Week", min_value=1, step=1)
 country = st.sidebar.text_input("Country", placeholder="e.g., USA, India")
-city = st.sidebar.text_input("State", placeholder="e.g., UP, MP")
+state = st.sidebar.text_input("State", placeholder="e.g., UP, MP")
 
 # Check if inputs are provided
 if not preferences:
@@ -66,8 +67,8 @@ if not country:
     st.warning("Please enter your country.")
     st.stop()
 
-if not city:
-    st.warning("Please enter your city.")
+if not state:
+    st.warning("Please enter your state.")
     st.stop()
 
 # Generate meal plan
@@ -78,7 +79,7 @@ if st.button("Generate Meal Plan"):
             "budget": budget,
             "meals_per_week": meals_per_week,
             "country": country,
-            "city": city
+            "state": state,
         })
 
         # Display response
